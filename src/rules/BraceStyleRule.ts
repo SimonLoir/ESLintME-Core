@@ -1,4 +1,4 @@
-import Rule from '@core/Rule';
+import Rule from '../Rule';
 
 export default class BraceStyleRule extends Rule<any> {
     public extract() {

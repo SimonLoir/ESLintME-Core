@@ -1,4 +1,4 @@
-import Rule from '@core/Rule';
+import Rule from '../Rule';
 import * as esprima from 'esprima';
 
 /* Rule representing the EOLLast rule in ESLint*/
