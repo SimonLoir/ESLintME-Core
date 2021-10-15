@@ -10,7 +10,7 @@ export default class Extractor {
         });
 
         this.eolLastRule.testFile(filename, program, content);
-
+        console.log(this.eolLastRule.getStoredKeys());
         return;
     }
 }
