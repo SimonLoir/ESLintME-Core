@@ -4,6 +4,7 @@ interface Store<T> {
     [key: string]: T;
 }
 export default class Rule<T> {
+    public static esname: string = 'rule';
     private _store: Store<T> = {};
 
     /**
@@ -86,12 +87,30 @@ export default class Rule<T> {
         return this._store[name];
     }
 
-    public all(test: (name: string, test: T) => boolean) {
+    /**
+     * Checks if all the tests follow the same pattern defined in the callback.
+     * @param check The function used to process the test result and compare it to the others.
+     * @returns Whether or not all the tests follow the pattern
+     */
+    public all(check: (name: string, test: T) => boolean) {
         const keys = this.getStoredKeys();
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
-            if (!test(key, this._store[key])) return false;
+            if (!check(key, this._store[key])) return false;
         }
         return true;
+    }
+
+    /**
+     * Counts the number of tests that follow the pattern defined in the callback
+     * @param check The function used to process the test result
+     * @returns The number of tests that follow the pattern
+     */
+    public count(check: (name: string, test: T) => boolean) {
+        let count = 0;
+        this.getStoredKeys().forEach((key) => {
+            if (check(key, this._store[key])) count++;
+        });
+        return count;
     }
 }

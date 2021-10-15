@@ -3,6 +3,8 @@ import * as esprima from 'esprima';
 
 /* Rule representing the EOLLast rule in ESLint*/
 export default class EOLLastRule extends Rule<boolean> {
+    public static esname = 'esol-last';
+
     public testFile(
         filename: string,
         program: esprima.Program,
@@ -24,10 +26,11 @@ export default class EOLLastRule extends Rule<boolean> {
         let result: RuleData | null = null;
         // Checks if all files end with a new line
         if (this.all((_, e) => e == true))
-            result = { ruleName: 'eol-last', value: 'always' };
+            result = { ruleName: EOLLastRule.esname, value: 'always' };
         // Checks if all files end without a new line
         else if (this.all((_, e) => e == false))
-            result = { ruleName: 'eol-last', value: 'never' };
+            result = { ruleName: EOLLastRule.esname, value: 'never' };
+        // At this point, it is impossible to find a pattern
         return result;
     }
 }
