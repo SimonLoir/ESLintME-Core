@@ -5,7 +5,7 @@ interface Store<T> {
 }
 export default class Rule<T> {
     public static esname: string = 'rule';
-    private _store: Store<T> = {};
+    protected _store: Store<T> = {};
 
     /**
      * Performs a test on the entire program

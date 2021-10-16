@@ -41,13 +41,14 @@ declare module 'espree' {
         loc: SourceLocation;
     }
 
-    export type TokenType = 'Identifier' | 'Punctuator' | 'String';
+    export type TokenType = 'Identifier' | 'Punctuator' | 'String' | 'Keyword';
     export interface Token {
         type: TokenType;
         loc: SourceLocation;
         start: number;
         end: number;
         range: number[];
+        value: string;
     }
 
     export interface SourceLocation {

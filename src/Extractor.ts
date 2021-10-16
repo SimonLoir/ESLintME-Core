@@ -1,7 +1,9 @@
 import * as espree from 'espree';
 import EOLLastRule from './rules/EOLLastRule';
+import FuncCallSpacingRule from './rules/FuncCallSpacing';
 export default class Extractor {
     private eolLastRule = new EOLLastRule();
+    private funcCallRule = new FuncCallSpacingRule();
 
     /**
      * Processes a new file
@@ -15,8 +17,29 @@ export default class Extractor {
             tokens: true,
             ecmaVersion: 'latest',
         });
+        const { tokens } = program;
 
         this.eolLastRule.testFile(filename, program, content);
+
+        for (let i = 0; i < tokens.length; i++) {
+            const token = tokens[i];
+
+            switch (token.type) {
+                case 'Punctuator':
+                    if (token.value == '(') {
+                        this.funcCallRule.testForToken(
+                            filename,
+                            program,
+                            content,
+                            i
+                        );
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 
     /**
@@ -27,6 +50,8 @@ export default class Extractor {
         const out: { [key: string]: RuleData | null } = {};
 
         out[EOLLastRule.esname] = this.eolLastRule.extract();
+        out[FuncCallSpacingRule.esname] = this.funcCallRule.extract();
+
         return out;
     }
 }
