@@ -1,4 +1,4 @@
-import * as esprima from 'esprima';
+import * as espree from 'espree';
 import EOLLastRule from './rules/EOLLastRule';
 export default class Extractor {
     private eolLastRule = new EOLLastRule();
@@ -9,10 +9,11 @@ export default class Extractor {
      * @param content The content of the file
      */
     public process(filename: string, content: string) {
-        const program = esprima.parseScript(content, {
+        const program = espree.parse(content, {
             range: true,
             loc: true,
             tokens: true,
+            ecmaVersion: 'latest',
         });
 
         this.eolLastRule.testFile(filename, program, content);

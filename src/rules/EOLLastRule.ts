@@ -1,5 +1,5 @@
 import Rule from '../Rule';
-import * as esprima from 'esprima';
+import * as espree from 'espree';
 
 /* Rule representing the EOLLast rule in ESLint*/
 export default class EOLLastRule extends Rule<boolean> {
@@ -7,7 +7,7 @@ export default class EOLLastRule extends Rule<boolean> {
 
     public testFile(
         filename: string,
-        program: esprima.Program,
+        program: espree.Program,
         content: string
     ) {
         console.assert(filename != null);
