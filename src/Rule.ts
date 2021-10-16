@@ -94,6 +94,9 @@ export default class Rule<T> {
      */
     public all(check: (name: string, test: T) => boolean) {
         const keys = this.getStoredKeys();
+
+        if (keys.length == 0) return false;
+
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (!check(key, this._store[key])) return false;
