@@ -1,4 +1,4 @@
-import * as esprima from 'esprima';
+import * as espree from 'espree';
 
 interface Store<T> {
     [key: string]: T;
@@ -15,7 +15,7 @@ export default class Rule<T> {
      */
     public testFile(
         filename: string,
-        program: esprima.Program,
+        program: espree.Program,
         content: string
     ) {
         throw (
@@ -33,7 +33,7 @@ export default class Rule<T> {
      */
     public testForToken(
         filename: string,
-        program: esprima.Program,
+        program: espree.Program,
         content: string,
         tokenID: number
     ) {

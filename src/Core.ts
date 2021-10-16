@@ -8,6 +8,7 @@ export default class Core {
         rules: {},
         env: undefined,
     };
+
     /**
      * Creates a eslintrc file in the specified format
      * @param type  The format of the output file
@@ -19,6 +20,9 @@ export default class Core {
         }
     }
 
+    /**
+     * Creates a new entry for each rule that matches a test pattern
+     */
     public populateRules() {
         this.outFile['rules'] = {};
         const rules = this.outFile['rules'];
