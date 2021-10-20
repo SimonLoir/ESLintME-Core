@@ -1,9 +1,11 @@
 import * as espree from 'espree';
+import CommaSpacingRule from './rules/CommaSpacingRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
 export default class Extractor {
     private eolLastRule = new EOLLastRule();
     private funcCallRule = new FuncCallSpacingRule();
+    private commaSpacingRule = new CommaSpacingRule();
 
     /**
      * Processes a new file
@@ -33,6 +35,13 @@ export default class Extractor {
                             content,
                             i
                         );
+                    } else if (token.value == ',') {
+                        this.commaSpacingRule.testForToken(
+                            filename,
+                            program,
+                            content,
+                            i
+                        );
                     }
                     break;
 
@@ -51,6 +60,7 @@ export default class Extractor {
 
         out[EOLLastRule.esname] = this.eolLastRule.extract();
         out[FuncCallSpacingRule.esname] = this.funcCallRule.extract();
+        out[CommaSpacingRule.esname] = this.commaSpacingRule.extract();
 
         return out;
     }

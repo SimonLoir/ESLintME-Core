@@ -116,4 +116,12 @@ export default class Rule<T> {
         });
         return count;
     }
+
+    /**
+     * Counts the number of tests stored.
+     * @returns The number of items stored
+     */
+    public get length() {
+        return this.getStoredKeys().length;
+    }
 }

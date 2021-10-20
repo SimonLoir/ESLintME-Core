@@ -1,4 +1,5 @@
 import Extractor from './Extractor';
+import CommaSpacingRule from './rules/CommaSpacingRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
 type buildType = 'json' | 'js' | 'yml';
@@ -28,7 +29,11 @@ export default class Core {
         this.outFile['rules'] = {};
         const rules = this.outFile['rules'];
         const data = this.rules.extract();
-        [EOLLastRule.esname, FuncCallSpacingRule.esname].forEach((name) => {
+        [
+            EOLLastRule.esname,
+            FuncCallSpacingRule.esname,
+            CommaSpacingRule.esname,
+        ].forEach((name) => {
             const d = data[name];
             if (!d) return;
 
@@ -39,6 +44,10 @@ export default class Core {
 
                 case FuncCallSpacingRule.esname:
                     rules[name] = ['error', d.value];
+                    break;
+
+                case CommaSpacingRule.esname:
+                    rules[name] = ['error', d.options];
                     break;
             }
         });
