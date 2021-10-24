@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as espree from 'espree';
 import CommaSpacingRule from '../src/rules/CommaSpacingRule';
 import DotLocationRule from '../src/rules/DotLocationRule';
+import FuncCallSpacingRule from '../src/rules/FuncCallSpacing';
 
 function readFile(name: string) {
     return fs.readFileSync(__dirname + '/data/' + name).toString();
@@ -130,5 +131,35 @@ describe(DotLocationRule.esname, () => {
         });
 
         expect(r.extract()).toBe(null);
+    });
+});
+
+describe(FuncCallSpacingRule.esname, () => {
+    let r: FuncCallSpacingRule;
+
+    beforeAll(() => {
+        r = new FuncCallSpacingRule();
+    });
+
+    test('always', () => {
+        const content = readFile('func-call-spacing');
+        const program = getProgram(content);
+
+        program.tokens.forEach((t, id) => {
+            r.testForToken('a.js', program, content, id);
+        });
+
+        expect(r.extract()?.value).toBe('always');
+    });
+
+    test('never', () => {
+        const content = readFile('func-call-spacing-2');
+        const program = getProgram(content);
+
+        program.tokens.forEach((t, id) => {
+            r.testForToken('a.js', program, content, id);
+        });
+
+        expect(r.extract()?.value).toBe('never');
     });
 });

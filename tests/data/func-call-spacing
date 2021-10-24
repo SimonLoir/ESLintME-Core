@@ -1,4 +1,8 @@
 function test(){
     console.log ("test");
+    const t = () => {
+        console.log ("hello world");
+    }
+    t ();
 }
 test ();
