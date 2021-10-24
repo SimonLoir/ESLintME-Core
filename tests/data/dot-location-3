@@ -1,0 +1,7 @@
+const test = obj
+    .color
+    .test()
+
+const test2 = obj.
+    color.
+    test()

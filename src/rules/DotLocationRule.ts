@@ -45,7 +45,14 @@ export default class DotLocationRule extends Rule<'object' | 'property'> {
     }
 
     public extract() {
-        console.log(this._store);
-        return null;
+        let result: RuleData | null = null;
+
+        if (this.all((_, e) => e == 'object'))
+            result = { ruleName: DotLocationRule.esname, value: 'object' };
+
+        if (this.all((_, e) => e == 'property'))
+            result = { ruleName: DotLocationRule.esname, value: 'property' };
+
+        return result;
     }
 }

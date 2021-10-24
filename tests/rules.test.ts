@@ -1,8 +1,8 @@
 import EOLLastRule from '../src/rules/EOLLastRule';
 import * as fs from 'fs';
 import * as espree from 'espree';
-import Rule from '../src/Rule';
-import FuncCallSpacingRule from '../src/rules/FuncCallSpacing';
+import CommaSpacingRule from '../src/rules/CommaSpacingRule';
+import DotLocationRule from '../src/rules/DotLocationRule';
 
 function readFile(name: string) {
     return fs.readFileSync(__dirname + '/data/' + name).toString();
@@ -17,14 +17,14 @@ function getProgram(content: string) {
     });
 }
 
-describe('Enf of file', () => {
+describe(EOLLastRule.esname, () => {
     let r: EOLLastRule;
 
     beforeAll(() => {
         r = new EOLLastRule();
     });
 
-    test(EOLLastRule.esname + '/always', () => {
+    test('always', () => {
         const content = readFile('eol-last');
         const program = getProgram(content);
 
@@ -33,7 +33,7 @@ describe('Enf of file', () => {
         expect(r.extract()?.value).toBe('always');
     });
 
-    test(EOLLastRule.esname + '/never', () => {
+    test('never', () => {
         const content = readFile('eol-last-never');
         const program = getProgram(content);
 
@@ -42,7 +42,7 @@ describe('Enf of file', () => {
         expect(r.extract()?.value).toBe('never');
     });
 
-    test(EOLLastRule.esname + '/mixed', () => {
+    test('mixed', () => {
         const content = readFile('eol-last');
         const content2 = readFile('eol-last-never');
 
@@ -56,42 +56,79 @@ describe('Enf of file', () => {
     });
 });
 
-/*describe('Function calls', () => {
-    let r: FuncCallSpacingRule;
+describe(CommaSpacingRule.esname, () => {
+    let r: CommaSpacingRule;
 
     beforeAll(() => {
-        r = new FuncCallSpacingRule();
+        r = new CommaSpacingRule();
     });
 
-    test(FuncCallSpacingRule.esname + '/always', () => {
-        const content = readFile('func-call-spacing');
+    test('before:false - after:true', () => {
+        const content = readFile('comma-spacing');
         const program = getProgram(content);
 
-        r.testFile('a', program, content);
+        program.tokens.forEach((t, id) => {
+            r.testForToken('a.js', program, content, id);
+        });
 
-        expect(r.extract()?.value).toBe('always');
+        const options = r.extract()?.options;
+
+        expect(options?.before).toBe(false);
+        expect(options?.after).toBe(true);
     });
 
-    test(FuncCallSpacingRule.esname + '/never', () => {
-        const content = readFile('func-call-spacing-2');
+    test('before:true - after:false', () => {
+        const content = readFile('comma-spacing-2');
         const program = getProgram(content);
 
-        r.testFile('a', program, content);
+        program.tokens.forEach((t, id) => {
+            r.testForToken('a.js', program, content, id);
+        });
 
-        expect(r.extract()?.value).toBe('never');
+        const options = r.extract()?.options;
+
+        expect(options?.before).toBe(true);
+        expect(options?.after).toBe(false);
+    });
+});
+
+describe(DotLocationRule.esname, () => {
+    let r: DotLocationRule;
+
+    beforeAll(() => {
+        r = new DotLocationRule();
     });
 
-    test(FuncCallSpacingRule.esname + '/mixed', () => {
-        const content = readFile('func-call-spacing');
-        const content2 = readFile('func-call-spacing-2');
-
+    test('object', () => {
+        const content = readFile('dot-location-2');
         const program = getProgram(content);
-        const program2 = getProgram(content2);
 
-        r.testFile('a', program, content);
-        r.testFile('b', program2, content2);
+        program.tokens.forEach((t, id) => {
+            r.testForToken('a.js', program, content, id);
+        });
+
+        expect(r.extract()?.value).toBe('object');
+    });
+
+    test('property', () => {
+        const content = readFile('dot-location');
+        const program = getProgram(content);
+
+        program.tokens.forEach((t, id) => {
+            r.testForToken('a.js', program, content, id);
+        });
+
+        expect(r.extract()?.value).toBe('property');
+    });
+
+    test('mixed', () => {
+        const content = readFile('dot-location-3');
+        const program = getProgram(content);
+
+        program.tokens.forEach((t, id) => {
+            r.testForToken('a.js', program, content, id);
+        });
 
         expect(r.extract()).toBe(null);
     });
 });
-*/

@@ -27,10 +27,14 @@ export default class CommaSpacingRule extends Rule<CommaSpacingOptions> {
 
         if (token.type != 'Punctuator' || token.value != ',') return;
 
+        if (previousToken.loc.start.line != token.loc.start.line) return;
+
         if (tokenID + 1 < tokens.length) {
             const nextToken = tokens[tokenID + 1];
 
             if (nextToken.type == 'Punctuator') return;
+
+            if (nextToken.loc.start.line != token.loc.start.line) return;
 
             result.after = nextToken.start != token.end;
         }
