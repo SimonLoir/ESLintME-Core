@@ -35,7 +35,6 @@ export default class FuncCallSpacingRule extends Rule<boolean> {
 
         // We store whether or not we use a space before the parenthesis
         this.store(filename + ':' + tokenID, previousToken.end != token.start);
-        console.log(this._store);
 
         //debug : if (previousToken.end != token.start) console.log(previousToken, token);
     }

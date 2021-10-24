@@ -1,5 +1,6 @@
 import Extractor from './Extractor';
 import CommaSpacingRule from './rules/CommaSpacingRule';
+import DotLocationRule from './rules/DotLocationRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
 type buildType = 'json' | 'js' | 'yml';
@@ -33,6 +34,7 @@ export default class Core {
             EOLLastRule.esname,
             FuncCallSpacingRule.esname,
             CommaSpacingRule.esname,
+            DotLocationRule.esname,
         ].forEach((name) => {
             const d = data[name];
             if (!d) return;
@@ -49,6 +51,9 @@ export default class Core {
                 case CommaSpacingRule.esname:
                     rules[name] = ['error', d.options];
                     break;
+
+                case DotLocationRule.esname:
+                    rules[name] = ['error', d.value];
             }
         });
     }
