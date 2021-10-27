@@ -10,6 +10,13 @@ export default class DotLocationRule extends Rule<'object' | 'property'> {
         content: string,
         tokenID: number
     ) {
+        console.assert(filename, 'No filename was specified');
+        console.assert(
+            program && program.tokens,
+            'The program should be defined and the tokens should be defined'
+        );
+        console.assert(tokenID > 0, 'The token ID must be greater than 0');
+
         if (tokenID < 1) return;
 
         const { tokens } = program;
@@ -22,14 +29,17 @@ export default class DotLocationRule extends Rule<'object' | 'property'> {
         const previousToken = tokens[tokenID - 1];
         const nextToken = tokens[tokenID + 1];
 
+        // We are only looking for dots in the code
         if (token.type != 'Punctuator' || token.value != '.') return;
 
+        // If the three tokens are on the same line
         if (
             previousToken.loc.end.line == token.loc.start.line &&
             token.loc.start.line == nextToken.loc.start.line
         )
             return;
 
+        // If the three tokens are on three different lines
         if (
             previousToken.loc.end.line != token.loc.start.line &&
             token.loc.start.line != nextToken.loc.start.line

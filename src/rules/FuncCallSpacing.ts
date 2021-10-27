@@ -9,6 +9,13 @@ export default class FuncCallSpacingRule extends Rule<boolean> {
         content: string,
         tokenID: number
     ) {
+        console.assert(filename, 'No filename was specified');
+        console.assert(
+            program && program.tokens,
+            'The program should be defined and the tokens should be defined'
+        );
+        console.assert(tokenID > 0, 'The token ID must be greater than 0');
+
         // Cannot be a function call since there is no char before
         if (tokenID < 1) return;
 

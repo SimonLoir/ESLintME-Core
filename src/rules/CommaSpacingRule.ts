@@ -15,6 +15,13 @@ export default class CommaSpacingRule extends Rule<CommaSpacingOptions> {
         content: string,
         tokenID: number
     ) {
+        console.assert(filename, 'No filename was specified');
+        console.assert(
+            program && program.tokens,
+            'The program should be defined and the tokens should be defined'
+        );
+        console.assert(tokenID > 0, 'The token ID must be greater than 0');
+
         if (tokenID < 1) return;
 
         const { tokens } = program;
@@ -25,20 +32,24 @@ export default class CommaSpacingRule extends Rule<CommaSpacingOptions> {
         const token = tokens[tokenID];
         const previousToken = tokens[tokenID - 1];
 
+        // We are only looking for commas in the code
         if (token.type != 'Punctuator' || token.value != ',') return;
 
+        // The previous token should be on the same line as the comma
         if (previousToken.loc.start.line != token.loc.start.line) return;
 
         if (tokenID + 1 < tokens.length) {
             const nextToken = tokens[tokenID + 1];
-
+            // In case of a trailing comma
             if (nextToken.type == 'Punctuator') return;
 
+            // The next token should be on the same line as the comma
             if (nextToken.loc.start.line != token.loc.start.line) return;
 
             result.after = nextToken.start != token.end;
         }
 
+        // Typical example : [,5, 10]
         if (previousToken.type == 'Punctuator') return;
 
         result.before = previousToken.end != token.start;
