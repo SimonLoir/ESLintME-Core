@@ -3,11 +3,35 @@ import CommaSpacingRule from './rules/CommaSpacingRule';
 import DotLocationRule from './rules/DotLocationRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
+type progressTracker = (
+    current: number,
+    total: number,
+    file: string,
+    ratio: number
+) => void;
 export default class Extractor {
     private eolLastRule = new EOLLastRule();
     private funcCallRule = new FuncCallSpacingRule();
     private commaSpacingRule = new CommaSpacingRule();
     private dotLocationRule = new DotLocationRule();
+    private progressHandler: progressTracker = (c, t, file, r) => {
+        console.log(`$${file} > task ${c} out of ${t}, ${r * 100}%`);
+    };
+    private totalTasks = 0;
+    private currentTask = 0;
+    private currentFile: string = '';
+
+    private progress(by: number = 1, shoudUpdate = true) {
+        this.currentTask += by;
+
+        if (shoudUpdate)
+            this.progressHandler(
+                this.currentTask,
+                this.totalTasks,
+                this.currentFile,
+                this.currentTask / this.totalTasks
+            );
+    }
 
     /**
      * Processes a new file
@@ -15,6 +39,7 @@ export default class Extractor {
      * @param content The content of the file
      */
     public process(filename: string, content: string) {
+        this.currentFile = filename;
         const program = espree.parse(content, {
             range: true,
             loc: true,
@@ -23,7 +48,11 @@ export default class Extractor {
         });
         const { tokens } = program;
 
+        this.totalTasks = 1 + tokens.length;
+        this.currentTask = 0;
+
         this.eolLastRule.testFile(filename, program, content);
+        this.progress();
 
         for (let i = 0; i < tokens.length; i++) {
             const token = tokens[i];
@@ -57,7 +86,11 @@ export default class Extractor {
                 default:
                     break;
             }
+
+            this.progress(1, i % 1000 == 0);
         }
+        console.log('end');
+        this.progress(0);
     }
 
     /**
@@ -73,5 +106,9 @@ export default class Extractor {
         out[DotLocationRule.esname] = this.dotLocationRule.extract();
 
         return out;
+    }
+
+    public onProgress(callback: progressTracker) {
+        this.progressHandler = callback;
     }
 }
