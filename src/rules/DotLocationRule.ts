@@ -15,7 +15,7 @@ export default class DotLocationRule extends Rule<'object' | 'property'> {
             program && program.tokens,
             'The program should be defined and the tokens should be defined'
         );
-        console.assert(tokenID > 0, 'The token ID must be greater than 0');
+        console.assert(tokenID >= 0, 'The token ID must be greater than 0');
 
         if (tokenID < 1) return;
 
