@@ -34,6 +34,8 @@ export default class Core {
         const rules = this.outFile['rules'];
         const data = this.rules.extract();
         const exceptions = Object.keys(this.exceptions);
+
+        // Adding values for the rules
         Object.keys(data).forEach((name) => {
             const d = data[name];
 
@@ -51,6 +53,8 @@ export default class Core {
                     break;
             }
         });
+
+        // Overriding the rules based on the exceptions provided
         exceptions.forEach((name) => {
             rules[name] = this.exceptions[name];
         });
