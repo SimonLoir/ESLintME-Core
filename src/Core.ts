@@ -11,6 +11,9 @@ export default class Core {
         rules: {},
         env: undefined,
     };
+    private exceptions: {
+        [key: string]: any;
+    } = {};
 
     /**
      * Creates a eslintrc file in the specified format
@@ -30,31 +33,48 @@ export default class Core {
         this.outFile['rules'] = {};
         const rules = this.outFile['rules'];
         const data = this.rules.extract();
-        [
-            EOLLastRule.esname,
-            FuncCallSpacingRule.esname,
-            CommaSpacingRule.esname,
-            DotLocationRule.esname,
-        ].forEach((name) => {
+        const exceptions = Object.keys(this.exceptions);
+        Object.keys(data).forEach((name) => {
             const d = data[name];
+
             if (!d) return;
 
             switch (name) {
                 case EOLLastRule.esname:
-                    rules[name] = ['error', d.value];
-                    break;
-
                 case FuncCallSpacingRule.esname:
+                case DotLocationRule.esname:
                     rules[name] = ['error', d.value];
                     break;
 
                 case CommaSpacingRule.esname:
                     rules[name] = ['error', d.options];
                     break;
-
-                case DotLocationRule.esname:
-                    rules[name] = ['error', d.value];
             }
         });
+        exceptions.forEach((name) => {
+            rules[name] = this.exceptions[name];
+        });
+    }
+
+    /**
+     * Overrides the value of a rule.
+     * It can be used to disable an unwanted rule or change its value based on the project's needs
+     * @param rulename The name of the eslint rule
+     * @param newdata The value of the rule
+     */
+    public addRuleException(rulename: string, newdata: any) {
+        this.exceptions[rulename] = newdata;
+    }
+
+    /**
+     * Removes an exception for a specific rule
+     * @param rulename The name of the eslint rule
+     */
+    public removeException(rulename: string) {
+        if (this.exceptions[rulename]) delete this.exceptions[rulename];
+        console.log(
+            this.exceptions[rulename] == undefined,
+            'Failed to remove the exception'
+        );
     }
 }

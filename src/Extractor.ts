@@ -21,17 +21,7 @@ export default class Extractor {
     private currentTask = 0;
     private currentFile: string = '';
 
-    private progress(by: number = 1, shoudUpdate = true) {
-        this.currentTask += by;
-
-        if (shoudUpdate)
-            this.progressHandler(
-                this.currentTask,
-                this.totalTasks,
-                this.currentFile,
-                this.currentTask / this.totalTasks
-            );
-    }
+    private progress(by: number = 1, shoudUpdate = true) {}
 
     /**
      * Processes a new file
@@ -87,9 +77,8 @@ export default class Extractor {
                     break;
             }
 
-            this.progress(1, i % 1000 == 0);
+            this.progress(1, i % 10000 == 0);
         }
-        console.log('end');
         this.progress(0);
     }
 
