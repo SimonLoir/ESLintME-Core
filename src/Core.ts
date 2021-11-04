@@ -3,6 +3,7 @@ import CommaSpacingRule from './rules/CommaSpacingRule';
 import DotLocationRule from './rules/DotLocationRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
+import IndentRule from './rules/Indent';
 type buildType = 'json' | 'js' | 'yml';
 export default class Core {
     public rules = new Extractor();
@@ -45,6 +46,7 @@ export default class Core {
                 case EOLLastRule.esname:
                 case FuncCallSpacingRule.esname:
                 case DotLocationRule.esname:
+                case IndentRule.esname:
                     rules[name] = ['error', d.value];
                     break;
 

@@ -3,6 +3,7 @@ import CommaSpacingRule from './rules/CommaSpacingRule';
 import DotLocationRule from './rules/DotLocationRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
+import IndentRule from './rules/Indent';
 type progressTracker = (
     current: number,
     total: number,
@@ -14,6 +15,8 @@ export default class Extractor {
     private funcCallRule = new FuncCallSpacingRule();
     private commaSpacingRule = new CommaSpacingRule();
     private dotLocationRule = new DotLocationRule();
+    private indentRule = new IndentRule();
+
     private progressHandler: progressTracker = (c, t, file, r) => {
         console.log(`$${file} > task ${c} out of ${t}, ${r * 100}%`);
     };
@@ -43,6 +46,8 @@ export default class Extractor {
         this.currentTask = 0;
 
         this.eolLastRule.testFile(filename, program, content);
+        this.indentRule.testFile(filename, program, content);
+
         this.progress();
 
         for (let i = 0; i < tokens.length; i++) {
@@ -94,6 +99,7 @@ export default class Extractor {
         out[FuncCallSpacingRule.esname] = this.funcCallRule.extract();
         out[CommaSpacingRule.esname] = this.commaSpacingRule.extract();
         out[DotLocationRule.esname] = this.dotLocationRule.extract();
+        out[IndentRule.esname] = this.indentRule.extract();
 
         return out;
     }

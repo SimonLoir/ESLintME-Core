@@ -124,4 +124,16 @@ export default class Rule<T> {
     public get length() {
         return this.getStoredKeys().length;
     }
+
+    /**
+     * Tells wether all the tests returned the same result
+     * @returns true if all the tests returned the same result
+     *          false otherwise or if there is no test in store
+     */
+    public allSame() {
+        if (this.length == 0) return false;
+        let first = this._store[this.getStoredKeys()[0]];
+        console.log(first, this._store);
+        return this.all((_, elem) => elem == first);
+    }
 }

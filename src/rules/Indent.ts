@@ -55,12 +55,18 @@ export default class IndentRule extends Rule<any> {
                 }
             }
         }
-
-        console.log(lines, spaces);
     }
 
     public extract() {
-        console.log(this._store);
-        return null;
+        let result: ExtractedRuleData | null = null;
+        if (this.allSame()) {
+            console.log('same');
+            result = {
+                ruleName: IndentRule.esname,
+                value: this._store[this.getStoredKeys()[0]],
+            };
+            return result;
+        }
+        return result;
     }
 }
