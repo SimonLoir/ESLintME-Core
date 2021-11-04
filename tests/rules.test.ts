@@ -4,6 +4,28 @@ import * as espree from 'espree';
 import CommaSpacingRule from '../src/rules/CommaSpacingRule';
 import DotLocationRule from '../src/rules/DotLocationRule';
 import FuncCallSpacingRule from '../src/rules/FuncCallSpacing';
+import IndentRule from '../src/rules/Indent';
+
+/**
+ * String.prototype.replaceAll() polyfill
+ * https://gomakethings.com/how-to-replace-a-section-of-a-string-with-another-one-with-vanilla-js/
+ * @author Chris Ferdinandi
+ * @license MIT
+ */
+if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function (str, newStr: any) {
+        // If a regex pattern
+        if (
+            Object.prototype.toString.call(str).toLowerCase() ===
+            '[object regexp]'
+        ) {
+            return this.replace(str, newStr);
+        }
+
+        // If a string
+        return this.replace(new RegExp(str, 'g'), newStr);
+    };
+}
 
 function readFile(name: string) {
     return fs.readFileSync(__dirname + '/data/' + name).toString();
@@ -161,5 +183,40 @@ describe(FuncCallSpacingRule.esname, () => {
         });
 
         expect(r.extract()?.value).toBe('never');
+    });
+});
+
+describe(IndentRule.esname, () => {
+    let r: IndentRule;
+
+    beforeAll(() => {
+        r = new IndentRule();
+    });
+
+    test('2', () => {
+        const content = readFile('indent-2');
+        const program = getProgram(content);
+
+        r.testFile('a', program, content);
+
+        expect(r.extract()?.value).toBe(2);
+    });
+
+    test('4', () => {
+        const content = readFile('indent-4');
+        const program = getProgram(content);
+
+        r.testFile('a', program, content);
+
+        expect(r.extract()?.value).toBe(4);
+    });
+
+    test('tab', () => {
+        const content = readFile('indent-tab');
+        const program = getProgram(content);
+
+        r.testFile('a', program, content);
+
+        expect(r.extract()?.value).toBe('tab');
     });
 });

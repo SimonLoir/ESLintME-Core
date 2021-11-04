@@ -1,0 +1,6 @@
+function test(){
+  test("hello world");
+    // test
+  // test
+  /* hello world */
+}
