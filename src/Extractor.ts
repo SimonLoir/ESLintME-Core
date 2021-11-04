@@ -35,6 +35,7 @@ export default class Extractor {
             loc: true,
             tokens: true,
             ecmaVersion: 'latest',
+            sourceType: 'module',
         });
         const { tokens } = program;
 
