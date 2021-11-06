@@ -8,7 +8,7 @@ type buildType = 'json' | 'js' | 'yml';
 export default class Core {
     public rules = new Extractor();
     private outFile: any = {
-        extends: undefined,
+        extends: [],
         rules: {},
         env: undefined,
     };
@@ -69,6 +69,10 @@ export default class Core {
      * @param newdata The value of the rule
      */
     public addRuleException(rulename: string, newdata: any) {
+        console.assert(
+            rulename && newdata,
+            'A rulename and data associated must be provided'
+        );
         this.exceptions[rulename] = newdata;
     }
 
@@ -77,10 +81,22 @@ export default class Core {
      * @param rulename The name of the eslint rule
      */
     public removeException(rulename: string) {
+        console.assert(rulename, 'A rulename must be provided');
         if (this.exceptions[rulename]) delete this.exceptions[rulename];
         console.log(
             this.exceptions[rulename] == undefined,
             'Failed to remove the exception'
         );
+    }
+
+    /**
+     * Extends the config file with a predefined set of rules :
+     * eslint:recommended is a valid name
+     * @param name the name of the set of rules
+     */
+    public extends(name: string) {
+        console.assert(name, 'A name must be provided');
+        if (this.outFile.extends.index(name) < 0)
+            this.outFile.extends.push(name);
     }
 }
