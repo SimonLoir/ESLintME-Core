@@ -184,6 +184,41 @@ describe(FuncCallSpacingRule.esname, () => {
 
         expect(r.extract()?.value).toBe('never');
     });
+
+    test('normalize', () => {
+        expect(FuncCallSpacingRule.normalize('error')).toEqual([2]);
+        expect(FuncCallSpacingRule.normalize('warn')).toEqual([1]);
+        expect(FuncCallSpacingRule.normalize('off')).toEqual([0]);
+
+        expect(FuncCallSpacingRule.normalize(2)).toEqual([2]);
+        expect(FuncCallSpacingRule.normalize(1)).toEqual([1]);
+        expect(FuncCallSpacingRule.normalize(0)).toEqual([0]);
+
+        expect(FuncCallSpacingRule.normalize([0, 'never'])).toEqual([0]);
+        expect(FuncCallSpacingRule.normalize([0, 'always'])).toEqual([0]);
+        expect(FuncCallSpacingRule.normalize(['off', 'always'])).toEqual([0]);
+        expect(FuncCallSpacingRule.normalize(['off', 'never'])).toEqual([0]);
+
+        expect(FuncCallSpacingRule.normalize(['error', 'never'])).toEqual([2]);
+        expect(FuncCallSpacingRule.normalize(['error', 'always'])).toEqual([
+            2,
+            'always',
+        ]);
+        expect(
+            FuncCallSpacingRule.normalize([
+                'error',
+                'always',
+                { allowNewlines: false },
+            ])
+        ).toEqual([2, 'always']);
+        expect(
+            FuncCallSpacingRule.normalize([
+                'error',
+                'always',
+                { allowNewlines: true },
+            ])
+        ).toEqual([2, 'always', { allowNewlines: true }]);
+    });
 });
 
 describe(IndentRule.esname, () => {

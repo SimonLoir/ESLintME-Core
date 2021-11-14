@@ -57,4 +57,19 @@ export default class FuncCallSpacingRule extends Rule<boolean> {
         // At this point, it is impossible to find a pattern
         return result;
     }
+
+    public static normalize(data: any) {
+        data = Rule.normalize(data);
+        if (Array.isArray(data)) {
+            if (data.length > 1) {
+                if (data[1] == 'never') return [data[0]];
+                if (data.length == 3 && typeof data[2] == 'object') {
+                    if (data[2].allowNewlines)
+                        return [data[0], 'always', { allowNewlines: true }];
+                    else return [data[0], 'always'];
+                }
+            }
+        }
+        return data;
+    }
 }

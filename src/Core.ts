@@ -1,11 +1,23 @@
 import Extractor from './Extractor';
+import BraceStyleRule from './rules/BraceStyleRule';
 import CommaSpacingRule from './rules/CommaSpacingRule';
 import DotLocationRule from './rules/DotLocationRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
 import IndentRule from './rules/Indent';
+import Rule from './Rule';
+import NoMixedSpacesAndTabs from './rules/NoMixedSpacesAndTabs';
 type buildType = 'json' | 'js' | 'yml';
 export default class Core {
+    public static rules_list = [
+        BraceStyleRule,
+        CommaSpacingRule,
+        DotLocationRule,
+        EOLLastRule,
+        FuncCallSpacingRule,
+        IndentRule,
+        NoMixedSpacesAndTabs,
+    ];
     public rules = new Extractor();
     private outFile: any = {
         extends: [],
@@ -98,5 +110,19 @@ export default class Core {
         console.assert(name, 'A name must be provided');
         if (this.outFile.extends.index(name) < 0)
             this.outFile.extends.push(name);
+    }
+
+    /**
+     * Normalizes the value of a rule based on the rule's name
+     * @param rulename The name of the rule that needs to be normalized
+     * @param data The data that needs to be normalized
+     * @throws Exception if the name of the rule does not exist
+     */
+    public normalize(rulename: string, data: any) {
+        for (let i = 0; i < Core.rules_list.length; i++) {
+            const r: typeof Rule = Core.rules_list[i];
+            if (r.esname == rulename) return r.normalize(data);
+        }
+        throw 'The name of the rule is not a valid rule name';
     }
 }
