@@ -77,6 +77,27 @@ describe(EOLLastRule.esname, () => {
 
         expect(r.extract()).toBe(null);
     });
+
+    test('normalize', () => {
+        expect(EOLLastRule.normalize('error')).toEqual([2]);
+        expect(EOLLastRule.normalize('warn')).toEqual([1]);
+        expect(EOLLastRule.normalize('off')).toEqual([0]);
+
+        expect(EOLLastRule.normalize(2)).toEqual([2]);
+        expect(EOLLastRule.normalize(1)).toEqual([1]);
+        expect(EOLLastRule.normalize(0)).toEqual([0]);
+
+        expect(EOLLastRule.normalize([0, 'never'])).toEqual([0]);
+        expect(EOLLastRule.normalize([0, 'always'])).toEqual([0]);
+        expect(EOLLastRule.normalize(['off', 'always'])).toEqual([0]);
+        expect(EOLLastRule.normalize(['off', 'never'])).toEqual([0]);
+
+        expect(EOLLastRule.normalize([2, 'never'])).toEqual([2, 'never']);
+        expect(EOLLastRule.normalize([1, 'never'])).toEqual([1, 'never']);
+        expect(EOLLastRule.normalize([2, 'unix'])).toEqual([2]);
+        expect(EOLLastRule.normalize([2, 'windows'])).toEqual([2]);
+        expect(EOLLastRule.normalize([2, 'always'])).toEqual([2]);
+    });
 });
 
 describe(CommaSpacingRule.esname, () => {

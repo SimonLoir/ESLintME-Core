@@ -33,4 +33,18 @@ export default class EOLLastRule extends Rule<boolean> {
         // At this point, it is impossible to find a pattern
         return result;
     }
+
+    public static normalize(data: any) {
+        data = Rule.normalize(data);
+
+        if (Array.isArray(data)) {
+            if (data.length == 2) {
+                if (data[1] == 'unix' || data[1] == 'windows')
+                    data[1] = 'always';
+                if (data[1] == 'always') data = [data[0]];
+            }
+        }
+
+        return data;
+    }
 }
