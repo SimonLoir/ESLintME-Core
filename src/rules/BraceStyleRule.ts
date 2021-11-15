@@ -5,4 +5,7 @@ export default class BraceStyleRule extends Rule<any> {
     public extract() {
         return null;
     }
+    public static normalize(data: any) {
+        return data;
+    }
 }

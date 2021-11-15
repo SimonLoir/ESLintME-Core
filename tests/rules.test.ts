@@ -175,6 +175,31 @@ describe(DotLocationRule.esname, () => {
 
         expect(r.extract()).toBe(null);
     });
+
+    test('normalize', () => {
+        expect(DotLocationRule.normalize('error')).toEqual([2]);
+        expect(DotLocationRule.normalize('warn')).toEqual([1]);
+        expect(DotLocationRule.normalize('off')).toEqual([0]);
+
+        expect(DotLocationRule.normalize(2)).toEqual([2]);
+        expect(DotLocationRule.normalize(1)).toEqual([1]);
+        expect(DotLocationRule.normalize(0)).toEqual([0]);
+
+        expect(DotLocationRule.normalize([0, 'property'])).toEqual([0]);
+        expect(DotLocationRule.normalize([0, 'object'])).toEqual([0]);
+        expect(DotLocationRule.normalize(['off', 'object'])).toEqual([0]);
+        expect(DotLocationRule.normalize(['off', 'property'])).toEqual([0]);
+
+        expect(DotLocationRule.normalize([2, 'property'])).toEqual([
+            2,
+            'property',
+        ]);
+        expect(DotLocationRule.normalize([1, 'property'])).toEqual([
+            1,
+            'property',
+        ]);
+        expect(DotLocationRule.normalize([2, 'object'])).toEqual([2]);
+    });
 });
 
 describe(FuncCallSpacingRule.esname, () => {

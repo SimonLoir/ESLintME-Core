@@ -74,4 +74,8 @@ export default class CommaSpacingRule extends Rule<CommaSpacingOptions> {
 
         return result;
     }
+
+    public static normalize(data: any) {
+        return data;
+    }
 }

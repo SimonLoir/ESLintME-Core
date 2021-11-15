@@ -119,10 +119,19 @@ export default class Core {
      * @throws Exception if the name of the rule does not exist
      */
     public normalize(rulename: string, data: any) {
+        return Core.getRule(rulename).normalize(data);
+    }
+
+    /**
+     * Gets a rule by its name
+     * @param rulename The name of the rule
+     * @returns The rule
+     */
+    public static getRule(rulename: string): typeof Rule {
         for (let i = 0; i < Core.rules_list.length; i++) {
             const r: typeof Rule = Core.rules_list[i];
-            if (r.esname == rulename) return r.normalize(data);
+            if (r.esname == rulename) return r;
         }
-        throw 'The name of the rule is not a valid rule name';
+        throw new Error('The rule could not be found');
     }
 }

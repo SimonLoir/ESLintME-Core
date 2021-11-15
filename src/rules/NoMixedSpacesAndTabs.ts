@@ -35,4 +35,8 @@ export default class NoMixedSpacesAndTabs extends Rule<boolean | 'smart-tabs'> {
     public extract() {
         return null;
     }
+
+    public static normalize(data: any) {
+        return data;
+    }
 }

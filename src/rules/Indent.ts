@@ -69,4 +69,8 @@ export default class IndentRule extends Rule<any> {
         }
         return result;
     }
+
+    public static normalize(data: any) {
+        return data;
+    }
 }

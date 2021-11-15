@@ -65,4 +65,16 @@ export default class DotLocationRule extends Rule<'object' | 'property'> {
 
         return result;
     }
+
+    public static normalize(data: any) {
+        data = Rule.normalize(data);
+
+        if (Array.isArray(data)) {
+            if (data.length == 2) {
+                if (data[1] == 'object') data = [data[0]];
+            }
+        }
+
+        return data;
+    }
 }
