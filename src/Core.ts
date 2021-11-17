@@ -7,6 +7,7 @@ import FuncCallSpacingRule from './rules/FuncCallSpacing';
 import IndentRule from './rules/Indent';
 import Rule from './Rule';
 import NoMixedSpacesAndTabs from './rules/NoMixedSpacesAndTabs';
+import NoVarRule from './rules/NoVarRule';
 type buildType = 'json' | 'js' | 'yml';
 export default class Core {
     public static rules_list = [
@@ -59,11 +60,15 @@ export default class Core {
                 case FuncCallSpacingRule.esname:
                 case DotLocationRule.esname:
                 case IndentRule.esname:
-                    rules[name] = ['error', d.value];
+                    rules[name] = [2, d.value];
+                    break;
+
+                case NoVarRule.esname:
+                    rules[name] = [2];
                     break;
 
                 case CommaSpacingRule.esname:
-                    rules[name] = ['error', d.options];
+                    rules[name] = [2, d.options];
                     break;
             }
         });
