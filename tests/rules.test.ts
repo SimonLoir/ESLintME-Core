@@ -1,6 +1,6 @@
-import EOLLastRule from '../src/rules/EOLLastRule';
 import * as fs from 'fs';
 import * as espree from 'espree';
+import EOLLastRule from '../src/rules/EOLLastRule';
 import CommaSpacingRule from '../src/rules/CommaSpacingRule';
 import DotLocationRule from '../src/rules/DotLocationRule';
 import FuncCallSpacingRule from '../src/rules/FuncCallSpacing';

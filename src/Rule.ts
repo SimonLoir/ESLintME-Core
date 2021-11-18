@@ -141,6 +141,7 @@ export default class Rule<T> {
      * Normalizes the value of the rule.
      * Removes the default values.
      * @param data The data that needs to be normalized
+     * @returns The normalized value of the rule
      */
     public static normalize(data: any) {
         if (data == 'off') data = 0;
