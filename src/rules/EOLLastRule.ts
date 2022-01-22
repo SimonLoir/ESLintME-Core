@@ -3,7 +3,7 @@ import * as espree from 'espree';
 
 /* Rule representing the EOLLast rule in ESLint*/
 export default class EOLLastRule extends Rule<boolean> {
-    public static esname = 'esol-last';
+    public static esname = 'eol-last';
 
     public testFile(
         filename: string,

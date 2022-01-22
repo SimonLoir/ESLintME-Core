@@ -4,6 +4,7 @@ import DotLocationRule from './rules/DotLocationRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
 import IndentRule from './rules/Indent';
+import NoDebuggerRule from './rules/NoDebuggerRule';
 import NoVarRule from './rules/NoVarRule';
 type progressTracker = (
     current: number,
@@ -18,6 +19,7 @@ export default class Extractor {
     private dotLocationRule = new DotLocationRule();
     private indentRule = new IndentRule();
     private novarRule = new NoVarRule();
+    private noDebuggerRule = new NoDebuggerRule();
 
     private progressHandler: progressTracker = (c, t, file, r) => {
         console.log(`$${file} > task ${c} out of ${t}, ${r * 100}%`);
@@ -89,6 +91,14 @@ export default class Extractor {
                             i
                         );
                     }
+
+                    if (token.value == 'debugger')
+                        this.noDebuggerRule.testForToken(
+                            filename,
+                            program,
+                            content,
+                            i
+                        );
                     break;
 
                 default:
@@ -113,6 +123,7 @@ export default class Extractor {
         out[DotLocationRule.esname] = this.dotLocationRule.extract();
         out[IndentRule.esname] = this.indentRule.extract();
         out[NoVarRule.esname] = this.novarRule.extract();
+        out[NoDebuggerRule.esname] = this.noDebuggerRule.extract();
 
         return out;
     }

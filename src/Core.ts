@@ -8,6 +8,7 @@ import IndentRule from './rules/Indent';
 import Rule from './Rule';
 import NoMixedSpacesAndTabs from './rules/NoMixedSpacesAndTabs';
 import NoVarRule from './rules/NoVarRule';
+import NoDebuggerRule from './rules/NoDebuggerRule';
 type buildType = 'json' | 'js' | 'yml';
 export default class Core {
     public static rules_list = [
@@ -18,6 +19,8 @@ export default class Core {
         FuncCallSpacingRule,
         IndentRule,
         NoMixedSpacesAndTabs,
+        NoVarRule,
+        NoDebuggerRule,
     ];
     public rules = new Extractor();
     private outFile: any = {
@@ -44,34 +47,9 @@ export default class Core {
      * Creates a new entry for each rule that matches a test pattern
      */
     public populateRules() {
-        this.outFile['rules'] = {};
+        this.outFile['rules'] = this.extractRules();
         const rules = this.outFile['rules'];
-        const data = this.rules.extract();
         const exceptions = Object.keys(this.exceptions);
-
-        // Adding values for the rules
-        Object.keys(data).forEach((name) => {
-            const d = data[name];
-
-            if (!d) return;
-
-            switch (name) {
-                case EOLLastRule.esname:
-                case FuncCallSpacingRule.esname:
-                case DotLocationRule.esname:
-                case IndentRule.esname:
-                    rules[name] = [2, d.value];
-                    break;
-
-                case NoVarRule.esname:
-                    rules[name] = [2];
-                    break;
-
-                case CommaSpacingRule.esname:
-                    rules[name] = [2, d.options];
-                    break;
-            }
-        });
 
         // Overriding the rules based on the exceptions provided
         exceptions.forEach((name) => {
@@ -124,6 +102,8 @@ export default class Core {
      * @throws Exception if the name of the rule does not exist
      */
     public normalize(rulename: string, data: any) {
+        console.assert(rulename, 'You should provide a rule name');
+        console.assert(data, 'No data to normalize');
         return Core.getRule(rulename).normalize(data);
     }
 
@@ -133,10 +113,41 @@ export default class Core {
      * @returns The rule
      */
     public static getRule(rulename: string): typeof Rule {
+        console.assert(rulename, 'You should provided a rule name');
         for (let i = 0; i < Core.rules_list.length; i++) {
             const r: typeof Rule = Core.rules_list[i];
             if (r.esname == rulename) return r;
         }
         throw new Error('The rule could not be found');
+    }
+
+    public extractRules() {
+        const data = this.rules.extract();
+        const rules: any = {};
+        // Adding values for the rules
+        Object.keys(data).forEach((name) => {
+            const d = data[name];
+
+            if (!d) return;
+
+            switch (name) {
+                case EOLLastRule.esname:
+                case FuncCallSpacingRule.esname:
+                case DotLocationRule.esname:
+                case IndentRule.esname:
+                    rules[name] = [2, d.value];
+                    break;
+
+                case NoVarRule.esname:
+                case NoDebuggerRule.esname:
+                    rules[name] = [2];
+                    break;
+
+                case CommaSpacingRule.esname:
+                    rules[name] = [2, d.options];
+                    break;
+            }
+        });
+        return rules;
     }
 }
