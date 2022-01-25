@@ -36,6 +36,8 @@ export default class Extractor {
      * @param content The content of the file
      */
     public process(filename: string, content: string) {
+        console.assert(filename, 'No filename was provided');
+        console.assert(content, "Can't process a file without content");
         this.currentFile = filename;
         const program = espree.parse(content, {
             range: true,

@@ -9,6 +9,7 @@ import Rule from './Rule';
 import NoMixedSpacesAndTabs from './rules/NoMixedSpacesAndTabs';
 import NoVarRule from './rules/NoVarRule';
 import NoDebuggerRule from './rules/NoDebuggerRule';
+import * as yaml from 'js-yaml';
 type buildType = 'json' | 'js' | 'yml';
 export default class Core {
     public static rules_list = [
@@ -30,6 +31,9 @@ export default class Core {
     };
     private exceptions: {
         [key: string]: any;
+    } = {};
+    private ruleCustomLevels: {
+        [key: string]: 0 | 1 | 2;
     } = {};
 
     /**
@@ -121,6 +125,10 @@ export default class Core {
         throw new Error('The rule could not be found');
     }
 
+    /**
+     * Extract all the rules found in the js files
+     * @returns A dictionary of the rules found with the rulename as a key.
+     */
     public extractRules() {
         const data = this.rules.extract();
         const rules: any = {};
@@ -149,5 +157,42 @@ export default class Core {
             }
         });
         return rules;
+    }
+
+    /**
+     * Sets the new level of a rule.
+     * 0 -> ignore
+     * 1 -> warning
+     * 2 -> error
+     * Overrides the default level (2) for a specific rule.
+     * @param rulename The name of the rule
+     * @param level The new rule level
+     */
+    public setRuleLevel(rulename: string, level: 0 | 1 | 2) {
+        console.assert(rulename, 'Rule name should be provided');
+        console.assert(
+            level && level > -1 && level < 3,
+            'Incorrect rule level'
+        );
+        this.ruleCustomLevels[rulename] = level;
+    }
+
+    /**
+     * Exports the new config file based on the format
+     * @param format The format of the requested config file
+     * @returns The contents of the new config file
+     */
+    public export(format: buildType): string {
+        console.assert(format, 'Incorrect format type provided');
+        const rules = this.extractRules();
+
+        switch (format) {
+            case 'js':
+                return '';
+            case 'json':
+                return JSON.stringify(rules);
+            case 'yml':
+                return yaml.dump({ rules });
+        }
     }
 }
