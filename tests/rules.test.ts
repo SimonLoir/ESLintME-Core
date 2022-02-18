@@ -5,6 +5,7 @@ import CommaSpacingRule from '../src/rules/CommaSpacingRule';
 import DotLocationRule from '../src/rules/DotLocationRule';
 import FuncCallSpacingRule from '../src/rules/FuncCallSpacing';
 import IndentRule from '../src/rules/Indent';
+import Rule from '../src/Rule';
 
 /**
  * String.prototype.replaceAll() polyfill
@@ -300,4 +301,21 @@ describe(IndentRule.esname, () => {
 
         expect(r.extract()?.value).toBe('tab');
     });
+});
+
+describe('normalization', () => {
+    test('warn', () => expect(Rule.normalize('warn')).toEqual([1]));
+    test('error', () => expect(Rule.normalize('error')).toEqual([2]));
+    test('off', () => expect(Rule.normalize('off')).toEqual([0]));
+
+    test('[warn]', () => expect(Rule.normalize(['warn'])).toEqual([1]));
+    test('[error]', () => expect(Rule.normalize(['error'])).toEqual([2]));
+    test('[off]', () => expect(Rule.normalize(['off'])).toEqual([0]));
+
+    test('1', () => expect(Rule.normalize(1)).toEqual([1]));
+    test('2', () => expect(Rule.normalize(2)).toEqual([2]));
+    test('0', () => expect(Rule.normalize(0)).toEqual([0]));
+
+    test('Rule disabled with data', () =>
+        expect(Rule.normalize([0, 'test', 'some data'])).toEqual([0]));
 });
