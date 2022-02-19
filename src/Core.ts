@@ -23,18 +23,24 @@ export default class Core {
         NoVarRule,
         NoDebuggerRule,
     ];
+
     public rules = new Extractor();
+
     private outFile: any = {
         extends: [],
         rules: {},
         env: undefined,
     };
+
     private exceptions: {
         [key: string]: any;
     } = {};
+
     private ruleCustomLevels: {
         [key: string]: 0 | 1 | 2;
     } = {};
+
+    private ruleSetsOrder: OOListItem[] = [];
 
     /**
      * Creates a eslintrc file in the specified format
@@ -194,5 +200,33 @@ export default class Core {
             case 'yml':
                 return yaml.dump({ rules });
         }
+    }
+
+    /**
+     * Sets the order in which the sets of rules must be used
+     * @param order A list of items representing the different set of rules that can be used in the program
+     */
+    public setRulesOrder(order: OOListItem[]) {
+        console.assert(
+            order && order.length > 0,
+            'The order list must be provided'
+        );
+        console.log('New rules order : ', order);
+        this.ruleSetsOrder = order;
+    }
+
+    /**
+     * Stores a new set of rules identified by a name.
+     * @param set_name The name of the set of rules
+     * @param set The set of rules itself
+     */
+    public setNamedRuleset(set_name: string, set: { [key: string]: any }) {
+        console.assert(
+            set_name,
+            'The name of the set of rules must be provided'
+        );
+        console.assert(set, 'The set of rules must be provided');
+
+        console.log('Storing the new set', set_name, 'as', set);
     }
 }
