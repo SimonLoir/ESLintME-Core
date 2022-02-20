@@ -32,7 +32,7 @@ export default class Core {
         env: undefined,
     };
 
-    private exceptions: {
+    private _exceptions: {
         [key: string]: any;
     } = {};
 
@@ -47,6 +47,12 @@ export default class Core {
     } = {};
 
     private ruleSetsOrder: OOListItem[] = [];
+
+    public get exceptions(): {
+        [key: string]: any;
+    } {
+        return { ...this._exceptions };
+    }
 
     /**
      * Creates a eslintrc file in the specified format
@@ -65,11 +71,11 @@ export default class Core {
     public populateRules() {
         this.outFile['rules'] = this.extractRules();
         const rules = this.outFile['rules'];
-        const exceptions = Object.keys(this.exceptions);
+        const exceptions = Object.keys(this._exceptions);
 
         // Overriding the rules based on the exceptions provided
         exceptions.forEach((name) => {
-            rules[name] = this.exceptions[name];
+            rules[name] = this._exceptions[name];
         });
     }
 
@@ -84,7 +90,7 @@ export default class Core {
             rulename && newdata,
             'A rulename and data associated must be provided'
         );
-        this.exceptions[rulename] = newdata;
+        this._exceptions[rulename] = newdata;
     }
 
     /**
@@ -93,9 +99,9 @@ export default class Core {
      */
     public removeException(rulename: string) {
         console.assert(rulename, 'A rulename must be provided');
-        if (this.exceptions[rulename]) delete this.exceptions[rulename];
+        if (this._exceptions[rulename]) delete this._exceptions[rulename];
         console.log(
-            this.exceptions[rulename] == undefined,
+            this._exceptions[rulename] == undefined,
             'Failed to remove the exception'
         );
     }
@@ -190,6 +196,7 @@ export default class Core {
     }
 
     public getRules() {
+        console.log('get rules called');
         const extracted = this.extractRules();
         const rules: any = {};
 
