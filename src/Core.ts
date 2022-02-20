@@ -36,6 +36,12 @@ export default class Core {
         [key: string]: any;
     } = {};
 
+    private sets: {
+        [name: string]: {
+            [key: string]: any;
+        };
+    } = {};
+
     private ruleCustomLevels: {
         [key: string]: 0 | 1 | 2;
     } = {};
@@ -183,6 +189,32 @@ export default class Core {
         this.ruleCustomLevels[rulename] = level;
     }
 
+    public getRules() {
+        const extracted = this.extractRules();
+        const rules: any = {};
+
+        if (this.ruleSetsOrder.length == 0) return extracted;
+
+        this.ruleSetsOrder.reverse().forEach((set) => {
+            if (!set.enabled) return;
+            if (set.id == 'None' || !set.id) return;
+
+            const found_set = this.sets[set.id];
+
+            if (!found_set && set.id != 'found')
+                return console.log(`Set ${set.id} could not be located`);
+
+            let to_merge = found_set ?? extracted;
+
+            Object.keys(to_merge).forEach((key) => {
+                if (rules[key] && !set.force) return;
+                rules[key] = to_merge[key];
+            });
+        });
+
+        return rules;
+    }
+
     /**
      * Exports the new config file based on the format
      * @param format The format of the requested config file
@@ -190,15 +222,16 @@ export default class Core {
      */
     public export(format: buildType): string {
         console.assert(format, 'Incorrect format type provided');
-        const rules = this.extractRules();
+        const rules = this.getRules();
+        const content = { rules };
 
         switch (format) {
             case 'js':
                 return '';
             case 'json':
-                return JSON.stringify(rules);
+                return JSON.stringify(content, null, 2);
             case 'yml':
-                return yaml.dump({ rules });
+                return yaml.dump(content);
         }
     }
 
@@ -228,5 +261,6 @@ export default class Core {
         console.assert(set, 'The set of rules must be provided');
 
         console.log('Storing the new set', set_name, 'as', set);
+        this.sets[set_name] = set;
     }
 }
