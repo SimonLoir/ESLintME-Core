@@ -100,7 +100,7 @@ export default class Core {
     public removeException(rulename: string) {
         console.assert(rulename, 'A rulename must be provided');
         if (this._exceptions[rulename]) delete this._exceptions[rulename];
-        console.log(
+        console.assert(
             this._exceptions[rulename] == undefined,
             'Failed to remove the exception'
         );
