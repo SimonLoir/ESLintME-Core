@@ -230,6 +230,11 @@ export default class Core {
     public export(format: buildType): string {
         console.assert(format, 'Incorrect format type provided');
         const rules = this.getRules();
+
+        Object.keys(this._exceptions).forEach((key) => {
+            rules[key] = this._exceptions[key];
+        });
+
         const content = { rules };
 
         switch (format) {
