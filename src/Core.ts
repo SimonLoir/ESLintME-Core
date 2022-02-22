@@ -196,15 +196,17 @@ export default class Core {
     }
 
     public getRules() {
-        console.log('get rules called');
         const extracted = this.extractRules();
+        console.log('get rules called', this.ruleSetsOrder, extracted);
+        console.group();
         const rules: any = {};
 
         if (this.ruleSetsOrder.length == 0) return extracted;
 
-        this.ruleSetsOrder.reverse().forEach((set) => {
-            if (!set.enabled) return;
-            if (set.id == 'None' || !set.id) return;
+        [...this.ruleSetsOrder].reverse().forEach((set) => {
+            if (!set.enabled) return console.log('ignored ', set);
+            if (set.id == 'None' || !set.id)
+                return console.log('ignored ', set);
 
             const found_set = this.sets[set.id];
 
@@ -212,13 +214,15 @@ export default class Core {
                 return console.log(`Set ${set.id} could not be located`);
 
             let to_merge = found_set ?? extracted;
+            console.log('Merge with ', to_merge);
 
             Object.keys(to_merge).forEach((key) => {
                 if (rules[key] && !set.force) return;
                 rules[key] = to_merge[key];
             });
         });
-
+        console.log(rules);
+        console.groupEnd();
         return rules;
     }
 
