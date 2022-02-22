@@ -6,12 +6,6 @@ import FuncCallSpacingRule from './rules/FuncCallSpacing';
 import IndentRule from './rules/Indent';
 import NoDebuggerRule from './rules/NoDebuggerRule';
 import NoVarRule from './rules/NoVarRule';
-type progressTracker = (
-    current: number,
-    total: number,
-    file: string,
-    ratio: number
-) => void;
 export default class Extractor {
     private eolLastRule = new EOLLastRule();
     private funcCallRule = new FuncCallSpacingRule();
@@ -110,4 +104,10 @@ export default class Extractor {
 
         return out;
     }
+
+    /**
+     * Extracts all the possibilities found for the rules
+     * @returns An array of possible values for the rules
+     */
+    public extractAllOptions() {}
 }
