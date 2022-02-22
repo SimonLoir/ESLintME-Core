@@ -20,16 +20,6 @@ export default class Extractor {
     private indentRule = new IndentRule();
     private novarRule = new NoVarRule();
     private noDebuggerRule = new NoDebuggerRule();
-
-    private progressHandler: progressTracker = (c, t, file, r) => {
-        console.log(`$${file} > task ${c} out of ${t}, ${r * 100}%`);
-    };
-    private totalTasks = 0;
-    private currentTask = 0;
-    private currentFile: string = '';
-
-    private progress(by: number = 1, shoudUpdate = true) {}
-
     /**
      * Processes a new file
      * @param filename The name of the file
@@ -38,7 +28,6 @@ export default class Extractor {
     public process(filename: string, content: string) {
         console.assert(filename, 'No filename was provided');
         console.assert(content, "Can't process a file without content");
-        this.currentFile = filename;
         const program = espree.parse(content, {
             range: true,
             loc: true,
@@ -48,13 +37,8 @@ export default class Extractor {
         });
         const { tokens } = program;
 
-        this.totalTasks = 1 + tokens.length;
-        this.currentTask = 0;
-
         this.eolLastRule.testFile(filename, program, content);
         this.indentRule.testFile(filename, program, content);
-
-        this.progress();
 
         for (let i = 0; i < tokens.length; i++) {
             const token = tokens[i];
@@ -106,10 +90,7 @@ export default class Extractor {
                 default:
                     break;
             }
-
-            this.progress(1, i % 10000 == 0);
         }
-        this.progress(0);
     }
 
     /**
@@ -128,9 +109,5 @@ export default class Extractor {
         out[NoDebuggerRule.esname] = this.noDebuggerRule.extract();
 
         return out;
-    }
-
-    public onProgress(callback: progressTracker) {
-        this.progressHandler = callback;
     }
 }
