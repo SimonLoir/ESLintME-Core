@@ -279,4 +279,8 @@ export default class Core {
         console.log('Storing the new set', set_name, 'as', set);
         this.sets[set_name] = set;
     }
+
+    public getAllOptions() {
+        return this.rules.extractAllOptions();
+    }
 }

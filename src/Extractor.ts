@@ -109,5 +109,17 @@ export default class Extractor {
      * Extracts all the possibilities found for the rules
      * @returns An array of possible values for the rules
      */
-    public extractAllOptions() {}
+    public extractAllOptions() {
+        const out: { [key: string]: RuleData[] } = {};
+
+        out[EOLLastRule.esname] = this.eolLastRule.getAllOptions();
+        out[FuncCallSpacingRule.esname] = this.funcCallRule.getAllOptions();
+        out[CommaSpacingRule.esname] = this.commaSpacingRule.getAllOptions();
+        out[DotLocationRule.esname] = this.dotLocationRule.getAllOptions();
+        out[IndentRule.esname] = this.indentRule.getAllOptions();
+        out[NoVarRule.esname] = this.novarRule.getAllOptions();
+        out[NoDebuggerRule.esname] = this.noDebuggerRule.getAllOptions();
+
+        return out;
+    }
 }

@@ -138,6 +138,17 @@ export default class Rule<T> {
     }
 
     /**
+     * Gets all the possible options found for this rule
+     * The extract method only gives a result if the probability is 100% but
+     * this method gives all the options.
+     * @returns An array of possible options
+     */
+    public getAllOptions(): RuleData[] {
+        console.warn('getAllOptions not implemented, returned []');
+        return [];
+    }
+
+    /**
      * Normalizes the value of the rule.
      * Removes the default values.
      * @param data The data that needs to be normalized

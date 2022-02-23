@@ -47,4 +47,14 @@ export default class NoDebuggerRule extends Rule<boolean> {
     public static normalize(data: any) {
         return Rule.normalize(data);
     }
+
+    public getAllOptions(): RuleData[] {
+        /**
+         * Those options should be removed
+         */
+        return [
+            { ruleName: NoDebuggerRule.esname, noValue: true },
+            { ruleName: NoDebuggerRule.esname, options: { test: true } },
+        ];
+    }
 }
