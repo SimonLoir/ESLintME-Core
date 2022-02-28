@@ -203,7 +203,7 @@ export default class Core {
 
         if (this.ruleSetsOrder.length == 0) return extracted;
 
-        [...this.ruleSetsOrder].reverse().forEach((set) => {
+        this.ruleSetsOrder.forEach((set) => {
             if (!set.enabled) return console.log('ignored ', set);
             if (set.id == 'None' || !set.id)
                 return console.log('ignored ', set);
