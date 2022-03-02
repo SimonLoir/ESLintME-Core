@@ -26,12 +26,6 @@ export default class Core {
 
     public rules = new Extractor();
 
-    private outFile: any = {
-        extends: [],
-        rules: {},
-        env: undefined,
-    };
-
     private _exceptions: {
         [key: string]: any;
     } = {};
@@ -54,29 +48,21 @@ export default class Core {
         return { ...this._exceptions };
     }
 
+    private _env: { [key: string]: boolean } = {};
+
     /**
-     * Creates a eslintrc file in the specified format
-     * @param type  The format of the output file
+     * Returns the environnement used in the eslint config.
      */
-    public build(type: buildType) {
-        this.populateRules();
-        if (type == 'json') {
-            return JSON.stringify(this.outFile, null, 4);
-        }
+    get env() {
+        return { ...this._env };
     }
 
     /**
-     * Creates a new entry for each rule that matches a test pattern
+     * Sets the new environnement for the eslint config.
      */
-    public populateRules() {
-        this.outFile['rules'] = this.extractRules();
-        const rules = this.outFile['rules'];
-        const exceptions = Object.keys(this._exceptions);
-
-        // Overriding the rules based on the exceptions provided
-        exceptions.forEach((name) => {
-            rules[name] = this._exceptions[name];
-        });
+    set env(env: { [key: string]: boolean }) {
+        console.assert(env, 'No environnement provided');
+        this._env = env;
     }
 
     /**
@@ -104,17 +90,6 @@ export default class Core {
             this._exceptions[rulename] == undefined,
             'Failed to remove the exception'
         );
-    }
-
-    /**
-     * Extends the config file with a predefined set of rules :
-     * eslint:recommended is a valid name
-     * @param name the name of the set of rules
-     */
-    public extends(name: string) {
-        console.assert(name, 'A name must be provided');
-        if (this.outFile.extends.index(name) < 0)
-            this.outFile.extends.push(name);
     }
 
     /**
@@ -239,7 +214,7 @@ export default class Core {
             rules[key] = this._exceptions[key];
         });
 
-        const content = { rules };
+        const content = { env: this._env, rules };
 
         switch (format) {
             case 'js':
