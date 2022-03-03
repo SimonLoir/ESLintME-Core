@@ -170,9 +170,13 @@ export default class Core {
         this.ruleCustomLevels[rulename] = level;
     }
 
+    /**
+     * Gets the list of rules based on the data extracted from the files
+     * and the sets of rules provided.
+     * @returns A key-value object containing the rules and their values.
+     */
     public getRules() {
         const extracted = this.extractRules();
-        console.log('get rules called', this.ruleSetsOrder, extracted);
         console.group();
         const rules: any = {};
 
@@ -218,7 +222,7 @@ export default class Core {
 
         switch (format) {
             case 'js':
-                return '';
+                return `module.exports = ${JSON.stringify(content, null, 2)}`;
             case 'json':
                 return JSON.stringify(content, null, 2);
             case 'yml':
@@ -255,6 +259,10 @@ export default class Core {
         this.sets[set_name] = set;
     }
 
+    /**
+     * Extracts all options from a rule.
+     * @returns The options found for each rule.
+     */
     public getAllOptions() {
         return this.rules.extractAllOptions();
     }
