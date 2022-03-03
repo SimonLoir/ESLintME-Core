@@ -70,6 +70,14 @@ export default class Rule<T> {
     }
 
     /**
+     * Lists all the tests values
+     * @returns A list of the tests stored.
+     */
+    public getValues() {
+        return Object.values(this._store);
+    }
+
+    /**
      * Tells if an test is already in the store
      * @param name The name of the test in the store
      * @returns Whether the test exists in the store or not.

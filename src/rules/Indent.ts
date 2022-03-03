@@ -60,7 +60,6 @@ export default class IndentRule extends Rule<any> {
     public extract() {
         let result: ExtractedRuleData | null = null;
         if (this.allSame()) {
-            console.log('same');
             result = {
                 ruleName: IndentRule.esname,
                 value: this._store[this.getStoredKeys()[0]],
@@ -68,6 +67,16 @@ export default class IndentRule extends Rule<any> {
             return result;
         }
         return result;
+    }
+
+    public getAllOptions(): RuleData[] {
+        let out: RuleData[] = [];
+        out = [...new Set(this.getValues())]
+            .filter((v) => v != this.extract()?.value)
+            .map(function (v): RuleData {
+                return { ruleName: IndentRule.esname, value: v };
+            });
+        return out;
     }
 
     public static normalize(data: any) {
