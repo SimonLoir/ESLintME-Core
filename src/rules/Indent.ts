@@ -80,6 +80,6 @@ export default class IndentRule extends Rule<any> {
     }
 
     public static normalize(data: any) {
-        return data;
+        return Rule.normalize(data);
     }
 }

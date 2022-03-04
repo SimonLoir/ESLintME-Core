@@ -78,4 +78,13 @@ describe('core', () => {
 
         expect(core.exceptions).toEqual({});
     });
+
+    test('env', () => {
+        core.env = { browser: true };
+        expect(core.env).toEqual({ browser: true });
+    });
+
+    test('normalize', () => {
+        expect(core.normalize('indent', 'error')).toEqual([2]);
+    });
 });
