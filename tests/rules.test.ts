@@ -5,6 +5,7 @@ import CommaSpacingRule from '../src/rules/CommaSpacingRule';
 import DotLocationRule from '../src/rules/DotLocationRule';
 import FuncCallSpacingRule from '../src/rules/FuncCallSpacing';
 import IndentRule from '../src/rules/Indent';
+import NoMixedSpacesAndTabs from '../src/rules/NoMixedSpacesAndTabs';
 
 /**
  * String.prototype.replaceAll() polyfill
@@ -299,5 +300,26 @@ describe(IndentRule.esname, () => {
         r.testFile('a', program, content);
 
         expect(r.extract()?.value).toBe('tab');
+    });
+});
+
+describe(NoMixedSpacesAndTabs.esname, () => {
+    let r: NoMixedSpacesAndTabs;
+
+    beforeAll(() => {
+        r = new NoMixedSpacesAndTabs();
+    });
+
+    test('error', () => {
+        const content = readFile('no-mixed-space-and-tabs');
+        const program = getProgram(content);
+
+        r.testFile('a', program, content);
+
+        //expect(r.all((e, t) => t == true)).toBe(true);
+    });
+
+    test('normalize', () => {
+        expect(NoMixedSpacesAndTabs.normalize(2)).toEqual([2]);
     });
 });

@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as yaml from 'js-yaml';
 import Core from '../src/Core';
 import IndentRule from '../src/rules/Indent';
 
@@ -97,5 +98,18 @@ describe('core', () => {
             expect(opt[key]).toBeDefined();
             expect(opt[key]).toBeInstanceOf(Array);
         });
+    });
+
+    test('export-js', () => {
+        const js = core.export('js');
+        expect(js.indexOf('module.exports = ')).toBeGreaterThanOrEqual(0);
+        expect(js.indexOf(core.export('json'))).toBeGreaterThanOrEqual(0);
+    });
+
+    test('export-yml', () => {
+        const yml = core.export('yml');
+        const json = JSON.parse(core.export('json'));
+        const parsedYaml = yaml.load(yml);
+        expect(parsedYaml).toEqual(json);
     });
 });
