@@ -87,4 +87,15 @@ describe('core', () => {
     test('normalize', () => {
         expect(core.normalize('indent', 'error')).toEqual([2]);
     });
+
+    test('all-options', () => {
+        const opt = core.getAllOptions();
+        expect(opt).toBeDefined();
+        const keys = Object.keys(opt);
+        expect(keys.length).toBeGreaterThan(0);
+        keys.forEach((key) => {
+            expect(opt[key]).toBeDefined();
+            expect(opt[key]).toBeInstanceOf(Array);
+        });
+    });
 });

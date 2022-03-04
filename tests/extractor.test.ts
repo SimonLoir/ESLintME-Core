@@ -20,7 +20,7 @@ describe('core', () => {
         const keys = Object.keys(options);
 
         expect(keys.length).toBeGreaterThan(0);
-        keys.map((key) => {
+        keys.forEach((key) => {
             expect(options[key]).toBeDefined();
             expect(options[key]).toBeInstanceOf(Array);
         });
