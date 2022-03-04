@@ -8,5 +8,8 @@ describe('core', () => {
         e = new Extractor();
     });
 
-    test('test', () => {});
+    test('extract-all-options', () => {
+        const options = e.extractAllOptions();
+        expect(Object.keys(options).length).toBeGreaterThan(0);
+    });
 });
