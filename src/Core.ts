@@ -190,17 +190,15 @@ export default class Core {
             const found_set = this.sets[set.id];
 
             if (!found_set && set.id != 'found')
-                return console.log(`Set ${set.id} could not be located`);
+                return console.error(`Set ${set.id} could not be located`);
 
             let to_merge = found_set ?? extracted;
-            console.log('Merge with ', to_merge);
 
             Object.keys(to_merge).forEach((key) => {
                 if (rules[key] && !set.force) return;
                 rules[key] = to_merge[key];
             });
         });
-        console.log(rules);
         console.groupEnd();
         return rules;
     }
@@ -255,7 +253,7 @@ export default class Core {
         );
         console.assert(set, 'The set of rules must be provided');
 
-        console.log('Storing the new set', set_name, 'as', set);
+        console.info('Storing the new set', set_name, 'as', set);
         this.sets[set_name] = set;
     }
 

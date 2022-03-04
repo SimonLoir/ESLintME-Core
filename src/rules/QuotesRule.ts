@@ -43,8 +43,6 @@ export default class QuotesRule extends Rule<QuotesData> {
             escaped: token.value.indexOf('\\' + type) >= 0,
             quotesInside: this.otherQuotesInside(type, token.value),
         });
-
-        console.log(this._store);
     }
 
     private otherQuotesInside(type: string, str: string) {

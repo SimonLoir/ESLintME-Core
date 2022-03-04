@@ -141,7 +141,6 @@ export default class Rule<T> {
     public allSame() {
         if (this.length == 0) return false;
         let first = this._store[this.getStoredKeys()[0]];
-        console.log(first, this._store);
         return this.all((_, elem) => elem == first);
     }
 
