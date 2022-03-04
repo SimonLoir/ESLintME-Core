@@ -60,4 +60,22 @@ describe('core', () => {
         ]);
         expect(core.getRules()).toEqual(core.extractRules());
     });
+
+    test('rule-exception', () => {
+        core.addRuleException('indent', [0]);
+
+        expect(core.exceptions).toEqual({ indent: [0] });
+
+        expect(JSON.parse(core.export('json')).rules).toEqual({
+            ...core.extractRules(),
+            ...{ indent: [0] },
+        });
+    });
+
+    test('remove-rule-exception', () => {
+        core.addRuleException('indent', [0]);
+        core.removeException('indent');
+
+        expect(core.exceptions).toEqual({});
+    });
 });
