@@ -36,10 +36,6 @@ export default class Core {
         };
     } = {};
 
-    private ruleCustomLevels: {
-        [key: string]: 0 | 1 | 2;
-    } = {};
-
     private ruleSetsOrder: OOListItem[] = [];
 
     public get exceptions(): {
@@ -150,24 +146,6 @@ export default class Core {
             }
         });
         return rules;
-    }
-
-    /**
-     * Sets the new level of a rule.
-     * 0 -> ignore
-     * 1 -> warning
-     * 2 -> error
-     * Overrides the default level (2) for a specific rule.
-     * @param rulename The name of the rule
-     * @param level The new rule level
-     */
-    public setRuleLevel(rulename: string, level: 0 | 1 | 2) {
-        console.assert(rulename, 'Rule name should be provided');
-        console.assert(
-            level && level > -1 && level < 3,
-            'Incorrect rule level'
-        );
-        this.ruleCustomLevels[rulename] = level;
     }
 
     /**
