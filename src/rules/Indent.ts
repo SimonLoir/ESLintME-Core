@@ -71,7 +71,8 @@ export default class IndentRule extends Rule<any> {
 
     public getAllOptions(): RuleData[] {
         let out: RuleData[] = [];
-        out = [...new Set(this.getValues())]
+        const values = Array.from(new Set(this.getValues()));
+        out = [...values]
             .filter((v) => v != this.extract()?.value)
             .map(function (v): RuleData {
                 return { ruleName: IndentRule.esname, value: v };
