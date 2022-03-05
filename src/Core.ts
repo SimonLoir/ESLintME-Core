@@ -1,25 +1,21 @@
 import Extractor from './Extractor';
-import BraceStyleRule from './rules/BraceStyleRule';
 import CommaSpacingRule from './rules/CommaSpacingRule';
 import DotLocationRule from './rules/DotLocationRule';
 import EOLLastRule from './rules/EOLLastRule';
 import FuncCallSpacingRule from './rules/FuncCallSpacing';
 import IndentRule from './rules/Indent';
 import Rule from './Rule';
-import NoMixedSpacesAndTabs from './rules/NoMixedSpacesAndTabs';
 import NoVarRule from './rules/NoVarRule';
 import NoDebuggerRule from './rules/NoDebuggerRule';
 import * as yaml from 'js-yaml';
 type buildType = 'json' | 'js' | 'yml';
 export default class Core {
     public static rules_list = [
-        BraceStyleRule,
         CommaSpacingRule,
         DotLocationRule,
         EOLLastRule,
         FuncCallSpacingRule,
         IndentRule,
-        NoMixedSpacesAndTabs,
         NoVarRule,
         NoDebuggerRule,
     ];

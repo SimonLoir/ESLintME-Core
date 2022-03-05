@@ -33,6 +33,7 @@ export default class NoMixedSpacesAndTabs extends Rule<boolean | 'smart-tabs'> {
     }
 
     public extract() {
+        // TODO: work in progress - this rule is not implemented yet.
         return null;
     }
 
