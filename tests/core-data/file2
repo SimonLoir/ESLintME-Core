@@ -1,0 +1,6 @@
+debugger;
+console.log(["hello", "world"]);
+var test = "hello world";
+function t(){
+    console.log("test");
+}

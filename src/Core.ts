@@ -211,10 +211,7 @@ export default class Core {
      * @param order A list of items representing the different set of rules that can be used in the program
      */
     public setRulesOrder(order: OOListItem[]) {
-        console.assert(
-            order && order.length > 0,
-            'The order list must be provided'
-        );
+        console.assert(order != undefined, 'The order list must be provided');
         console.log('New rules order : ', order);
         this.ruleSetsOrder = order;
     }

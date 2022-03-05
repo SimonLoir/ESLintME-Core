@@ -3,10 +3,14 @@ import * as yaml from 'js-yaml';
 import Core from '../src/Core';
 import IndentRule from '../src/rules/Indent';
 
+function readFile(name: string) {
+    return fs.readFileSync(__dirname + '/core-data/' + name).toString();
+}
+
 describe('core', () => {
     let core: Core;
 
-    beforeAll(() => {
+    beforeEach(() => {
         core = new Core();
     });
 
@@ -62,14 +66,25 @@ describe('core', () => {
         expect(core.getRules()).toEqual(core.extractRules());
     });
 
+    test('set-force-disabled', () => {
+        core.setNamedRuleset('set1', { indent: 'error' });
+        core.setNamedRuleset('set2', { indent: 'off' });
+        core.setRulesOrder([
+            { enabled: true, force: true, id: 'set1', name: '' },
+            { enabled: true, force: false, id: 'set1', name: '' },
+        ]);
+        expect(core.getRules()).toEqual({ indent: 'error' });
+    });
+
     test('rule-exception', () => {
+        console.log(core);
         core.addRuleException('indent', [0]);
 
         expect(core.exceptions).toEqual({ indent: [0] });
 
         expect(JSON.parse(core.export('json')).rules).toEqual({
             ...core.extractRules(),
-            ...{ indent: [0] },
+            indent: [0],
         });
     });
 
@@ -111,5 +126,27 @@ describe('core', () => {
         const json = JSON.parse(core.export('json'));
         const parsedYaml = yaml.load(yml);
         expect(parsedYaml).toEqual(json);
+    });
+
+    test('extract-rules-file-1', () => {
+        const data = readFile('file1');
+        core.rules.process('file1.js', data);
+        const e = core.extractRules();
+        expect(e['eol-last']).toEqual([2, 'never']);
+        expect(e['no-var']).toBeDefined();
+    });
+
+    test('extract-rules-file-2', () => {
+        const data = readFile('file2');
+        core.rules.process('file2.js', data);
+        const e = core.extractRules();
+        expect(e['eol-last']).toEqual([2, 'always']);
+        expect(e['indent']).toBeDefined();
+        expect(e['no-var']).toBeUndefined();
+        expect(e['comma-spacing']).toBeDefined();
+    });
+
+    test('removed-undefined-exception', () => {
+        expect(core.removeException('abc')).toBeUndefined();
     });
 });

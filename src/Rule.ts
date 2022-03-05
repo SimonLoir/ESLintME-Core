@@ -162,20 +162,20 @@ export default class Rule<T> {
      * @returns The normalized value of the rule
      */
     public static normalize(data: any) {
-        if (data == 'off') data = 0;
-        if (data == 'warn') data = 1;
-        if (data == 'error') data = 2;
+        if (data === 'off') data = 0;
+        if (data === 'warn') data = 1;
+        if (data === 'error') data = 2;
 
-        if (typeof data == 'number') data = [data];
+        if (typeof data === 'number') data = [data];
 
         if (Array.isArray(data)) {
             if (data.length == 0) data = [0];
 
-            if (data[0] == 'off') data[0] = 0;
-            if (data[0] == 'warn') data[0] = 1;
-            if (data[0] == 'error') data[0] = 2;
+            if (data[0] === 'off') data[0] = 0;
+            if (data[0] === 'warn') data[0] = 1;
+            if (data[0] === 'error') data[0] = 2;
 
-            if (data[0] == 0) data = [0];
+            if (data[0] === 0) data = [0];
         }
 
         return data;

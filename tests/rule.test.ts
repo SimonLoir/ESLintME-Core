@@ -45,9 +45,9 @@ describe('normalization', () => {
     test('error', () => expect(Rule.normalize('error')).toEqual([2]));
     test('off', () => expect(Rule.normalize('off')).toEqual([0]));
 
+    test('[off]', () => expect(Rule.normalize(['off'])).toEqual([0]));
     test('[warn]', () => expect(Rule.normalize(['warn'])).toEqual([1]));
     test('[error]', () => expect(Rule.normalize(['error'])).toEqual([2]));
-    test('[off]', () => expect(Rule.normalize(['off'])).toEqual([0]));
 
     test('1', () => expect(Rule.normalize(1)).toEqual([1]));
     test('2', () => expect(Rule.normalize(2)).toEqual([2]));
