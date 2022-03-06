@@ -300,4 +300,17 @@ describe(IndentRule.esname, () => {
 
         expect(r.extract()?.value).toBe('tab');
     });
+
+    test('indent-options', () => {
+        const content = readFile('indent-4');
+        const program = getProgram(content);
+
+        const content2 = readFile('indent-2');
+        const program2 = getProgram(content2);
+
+        r.testFile('a', program, content);
+        r.testFile('b', program2, content2);
+
+        expect(r.getAllOptions().length).toBe(2);
+    });
 });
